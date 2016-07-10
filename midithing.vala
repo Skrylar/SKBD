@@ -18,6 +18,7 @@ public class midithing.Midithing : Gtk.Application {
 		Keyboard kbd = new Keyboard ();
 		appwin.add (kbd);
 
+		appwin.set_default_size (280, 100);
 		appwin.show_all ();
 	}
 
