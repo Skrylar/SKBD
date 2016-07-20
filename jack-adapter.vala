@@ -1,6 +1,7 @@
 
 class JackAdapter {
-	private static Jack.Port? _port;
+	private static Jack.Port? _port_in;
+	private static Jack.Port? _port_out;
 	private static Jack.Client? _client;
 
 	const uint8 MIDI_CHANNEL_MASK = 0x0F;
@@ -18,7 +19,7 @@ class JackAdapter {
 
 	private int jack_process (Jack.NFrames samples) {
 		// XXX taboo in a real_time thread
-		void* buffer = _port.get_buffer (samples);
+		void* buffer = _port_in.get_buffer (samples);
 		var events = Jack.Midi.get_event_count (buffer);
 		Jack.Midi.Event evt = {};
 		for (int i = 0; i < events; i++) {
@@ -39,7 +40,7 @@ class JackAdapter {
 		return 0;
 	}
 
-	public bool start(string client_name, string port_name) {
+	public bool start(string client_name, string port_in_name, string port_out_name) {
 		// start the server
 		Jack.Status status;
 		_client = Jack.Client.open (client_name, Jack.Options.NoStartServer, out status);
@@ -48,7 +49,8 @@ class JackAdapter {
 		}
 
 		// call the ships to port
-		_port = _client.port_register (port_name, Jack.DefaultMidiType, Jack.PortFlags.IsInput, 0);
+		_port_in = _client.port_register (port_in_name, Jack.DefaultMidiType, Jack.PortFlags.IsInput, 0);
+		_port_out = _client.port_register (port_out_name, Jack.DefaultMidiType, Jack.PortFlags.IsOutput, 0);
 		_client.set_process_callback (jack_process);
 		_client.active = true;
 		return true;
@@ -58,7 +60,8 @@ class JackAdapter {
 		if (_client != null) {
 			_client.active = false;
 			_client = null;
-			_port = null;
+			_port_in = null;
+			_port_out = null;
 		}
 	}
 
