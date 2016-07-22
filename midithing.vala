@@ -3,8 +3,16 @@ public class midithing.Midithing : Gtk.Application {
 	const string _port_in_name = "midi-in";
 	const string _port_out_name = "midi-out";
 
+	private Gtk.ApplicationWindow _appwin;
+
+	// deal with getting jack events
 	private Gtk.Switch _jack_switch;
 	private JackAdapter _jack_adapter;
+
+	// let the user know when sadness has ocurred
+	private weak Gtk.InfoBar _infobar;
+	private weak Gtk.Revealer _infobar_revealer;
+	private weak Gtk.Label _infobar_label;
 
 	public Midithing () {
 		Object(application_id: "skrylar.Midithing",
@@ -12,35 +20,73 @@ public class midithing.Midithing : Gtk.Application {
 		_jack_adapter = new JackAdapter ();
 	}
 
+	private void problem (string error) {
+		// make changes
+		_infobar.set_message_type (Gtk.MessageType.ERROR);
+		_infobar_label.label = error;
+		_infobar_revealer.reveal_child = true;
+	}
+
+	protected bool on_toggle_jack (bool state) {
+		if (state) {
+			if (!_jack_adapter.start (_jack_name, _port_in_name, _port_out_name)) {
+				// warning for smart people
+				warning ("Jack connection failed.");
+				// reset the GUI to desired state
+				_jack_switch.state = false;
+				_jack_switch.active = false;
+				// friendly UX warning
+				problem ("Could not connect to Jack. Is it running?");
+				// we're done
+				return true;
+			}
+		} else {
+			_jack_adapter.stop ();
+		}
+		_jack_switch.state = state;
+		return true;
+	}
+
 	protected override void activate () {
-		Gtk.ApplicationWindow appwin = new Gtk.ApplicationWindow (this);
+		_appwin = new Gtk.ApplicationWindow (this);
 		Gtk.HeaderBar header = new Gtk.HeaderBar ();
 		header.title = "Midithing";
 		header.show_close_button = true;
-		appwin.set_titlebar (header);
+		_appwin.set_titlebar (header);
 
 		_jack_switch = new Gtk.Switch ();
-		_jack_switch.state_set.connect ((state) => {
-				if (state) {
-					if (!_jack_adapter.start (_jack_name, _port_in_name, _port_out_name)) {
-						warning ("Jack startup failed.");
-						// TODO throw a visible notification here
-						_jack_switch.state = false;
-						return true;
-					}
-				} else {
-					_jack_adapter.stop ();
-				}
-				_jack_switch.state = state;
-				return true;
-		});
+		_jack_switch.state_set.connect (on_toggle_jack);
 		header.pack_end (_jack_switch);
 
-		Keyboard kbd = new Keyboard ();
-		appwin.add (kbd);
+		/* main content box */ {
+			var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
 
-		appwin.set_default_size (280, 100);
-		appwin.show_all ();
+			var infobar_revealer = new Gtk.Revealer ();
+			_infobar_revealer = infobar_revealer;
+			_infobar_revealer.reveal_child = false;
+			box.pack_start (_infobar_revealer, false);
+
+			var infobar = new Gtk.InfoBar ();
+			_infobar = infobar;
+			_infobar.show_close_button = true;
+			_infobar.response.connect ((id) => {
+					_infobar_revealer.reveal_child = false;
+			});
+			_infobar_revealer.add (_infobar);
+
+			var infobar_label = new Gtk.Label (null);
+			_infobar_label = infobar_label;
+			Gtk.Container content = _infobar.get_content_area ();
+			content.add (_infobar_label);
+
+			Keyboard kbd = new Keyboard ();
+			box.pack_end (kbd);
+
+			_appwin.add (box);
+		} /* main content box */
+
+		_appwin.set_default_size (280, 100);
+		_appwin.show_all ();
 	}
 
 	public static int main (string[] args) {
