@@ -18,6 +18,7 @@ public class midithing.Midithing : Gtk.Application {
 		Object(application_id: "skrylar.Midithing",
 			   flags: ApplicationFlags.FLAGS_NONE);
 		_jack_adapter = new JackAdapter ();
+		_jack_adapter.collect = on_idle;
 	}
 
 	private void problem (string error) {
@@ -47,7 +48,7 @@ public class midithing.Midithing : Gtk.Application {
 		return true;
 	}
 
-	protected override void activate () {
+	protected void create_gui () {
 		_appwin = new Gtk.ApplicationWindow (this);
 		Gtk.HeaderBar header = new Gtk.HeaderBar ();
 		header.title = "Midithing";
@@ -87,6 +88,18 @@ public class midithing.Midithing : Gtk.Application {
 
 		_appwin.set_default_size (280, 100);
 		_appwin.show_all ();
+	}
+
+	public bool on_idle () {
+		stdout.printf("inbox processed\n");
+		// TODO process inbox
+		_jack_adapter.inbox_size = 0;
+		return GLib.Source.REMOVE;
+	}
+
+	protected override void activate () {
+		// user needs this
+		create_gui ();
 	}
 
 	public static int main (string[] args) {

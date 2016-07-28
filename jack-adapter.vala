@@ -17,12 +17,15 @@ class JackAdapter {
 		PitchBend = (14 << 4),
 	}
 
+	// Queued as an idle event whenever the inbox has been changed
+	public SourceFunc collect;
+
 	// Stores events retrieved from process.
 	public Event inbox[127];
 
 	// Number of events in the inbox. Reset this to zero once you've
 	// read them.
-	public int inbox_size;
+	public int inbox_size = 0;
 
 	private int jack_process (Jack.NFrames samples) {
 		// XXX taboo in a real_time thread
@@ -36,12 +39,13 @@ class JackAdapter {
 		var events = Jack.Midi.get_event_count (buffer);
 		Jack.Midi.Event evt = {};
 
+		int ibox = inbox_size;
+
 		for (int i = 0; i < events; i++) {
 			// grab event
 			Jack.Midi.event_get (&evt, buffer, i);
 
 			// figure out if we care about this event
-			stdout.printf("channel: %d ", evt.buffer[0] & MIDI_CHANNEL_MASK);
 			switch (evt.buffer[0] & MIDI_COMMAND_MASK) {
 			case MidiMessageType.NoteOn:
 				if (inbox_size < 127) {
@@ -72,6 +76,13 @@ class JackAdapter {
 			Jack.Midi.Data* datum = Jack.Midi.event_reserve (out_buffer, evt.time, evt.size);
 			Posix.memmove (datum, evt.buffer, evt.size);
 		}
+
+		if (collect != null && ibox == 0 && inbox_size > 0) {
+			Idle.add (() => {
+					return collect ();
+				});
+		}
+
 		return 0;
 	}
 
