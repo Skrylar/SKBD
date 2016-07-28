@@ -7,4 +7,5 @@ jack = dependency('jack')
 
 executable('midithing', 'midithing.vala', 'keyboard.vala', 'jack-adapter.vala',
     vala_args: ['--vapidir', meson.source_root(), '--pkg', 'jack', '--pkg', 'posix'],
+    c_args: ['-w'],
     dependencies: [gobject, glib, gtk, jack])
