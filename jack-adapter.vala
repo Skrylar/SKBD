@@ -17,6 +17,13 @@ class JackAdapter {
 		PitchBend = (14 << 4),
 	}
 
+	// Stores events retrieved from process.
+	public Event inbox[127];
+
+	// Number of events in the inbox. Reset this to zero once you've
+	// read them.
+	public int inbox_size;
+
 	private int jack_process (Jack.NFrames samples) {
 		// XXX taboo in a real_time thread
 		void* buffer = _port_in.get_buffer (samples);
@@ -37,13 +44,22 @@ class JackAdapter {
 			stdout.printf("channel: %d ", evt.buffer[0] & MIDI_CHANNEL_MASK);
 			switch (evt.buffer[0] & MIDI_COMMAND_MASK) {
 			case MidiMessageType.NoteOn:
-				stdout.printf("note on: %d velocity: %d\n", evt.buffer[1], evt.buffer[2]);
+				if (inbox_size < 127) {
+					Event e = {};
+					e.type = EventType.NoteOn;
+					e.note = evt.buffer[2];
+					inbox[inbox_size++] = e;
+				}
 				break;
 			case MidiMessageType.NoteOff:
-				stdout.printf("note off: %d\n", evt.buffer[1]);
+				if (inbox_size < 127) {
+					Event e = {};
+					e.type = EventType.NoteOn;
+					e.note = evt.buffer[2];
+					inbox[inbox_size++] = e;
+				}
 				break;
 			default:
-				stdout.printf("midi event\n");
 				break;
 			}
 

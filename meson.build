@@ -5,7 +5,7 @@ glib = dependency('glib-2.0')
 gtk = dependency('gtk+-3.0')
 jack = dependency('jack')
 
-executable('midithing', 'midithing.vala', 'keyboard.vala', 'jack-adapter.vala',
+executable('midithing', 'midithing.vala', 'keyboard.vala', 'jack-adapter.vala', 'event.vala',
     vala_args: ['--vapidir', meson.source_root(), '--pkg', 'jack', '--pkg', 'posix'],
     c_args: ['-w'],
     dependencies: [gobject, glib, gtk, jack])
