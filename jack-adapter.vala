@@ -58,7 +58,7 @@ class JackAdapter {
 			case MidiMessageType.NoteOff:
 				if (inbox_size < 127) {
 					Event e = {};
-					e.type = EventType.NoteOn;
+					e.type = EventType.NoteOff;
 					e.note = evt.buffer[2];
 					inbox[inbox_size++] = e;
 				}
