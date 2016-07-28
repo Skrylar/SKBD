@@ -20,10 +20,20 @@ class JackAdapter {
 	private int jack_process (Jack.NFrames samples) {
 		// XXX taboo in a real_time thread
 		void* buffer = _port_in.get_buffer (samples);
+		void* out_buffer = _port_out.get_buffer (samples);
+
+		// clear output buffer
+		Jack.Midi.clear_buffer (out_buffer);
+
+		// prepare to receive events
 		var events = Jack.Midi.get_event_count (buffer);
 		Jack.Midi.Event evt = {};
+
 		for (int i = 0; i < events; i++) {
+			// grab event
 			Jack.Midi.event_get (&evt, buffer, i);
+
+			// figure out if we care about this event
 			stdout.printf("channel: %d ", evt.buffer[0] & MIDI_CHANNEL_MASK);
 			switch (evt.buffer[0] & MIDI_COMMAND_MASK) {
 			case MidiMessageType.NoteOn:
@@ -36,6 +46,15 @@ class JackAdapter {
 				stdout.printf("midi event\n");
 				break;
 			}
+
+			// pass the event forward
+
+			// XXX if we choose to implement any kind of filtering
+			// functionality, we will have to revisit this. that being
+			// said there are other programs which already do that, so
+			// we might not be too concerned about it.
+			Jack.Midi.Data* datum = Jack.Midi.event_reserve (out_buffer, evt.time, evt.size);
+			Posix.memmove (datum, evt.buffer, evt.size);
 		}
 		return 0;
 	}
