@@ -14,6 +14,8 @@ public class midithing.Midithing : Gtk.Application {
 	private weak Gtk.Revealer _infobar_revealer;
 	private weak Gtk.Label _infobar_label;
 
+	private weak Keyboard _keyboard;
+
 	public Midithing () {
 		Object(application_id: "skrylar.Midithing",
 			   flags: ApplicationFlags.FLAGS_NONE);
@@ -81,6 +83,7 @@ public class midithing.Midithing : Gtk.Application {
 			content.add (_infobar_label);
 
 			Keyboard kbd = new Keyboard ();
+			_keyboard = kbd;
 			box.pack_end (kbd);
 
 			_appwin.add (box);
@@ -91,9 +94,24 @@ public class midithing.Midithing : Gtk.Application {
 	}
 
 	public bool on_idle () {
-		stdout.printf("inbox processed\n");
-		// TODO process inbox
+		// update keyboard control
+		for (int eid = 0; eid < _jack_adapter.inbox_size; eid++) {
+			switch (_jack_adapter.inbox[eid].type) {
+			case EventType.NoteOn:
+				_keyboard.set_note (_jack_adapter.inbox[eid].note, true);
+				break;
+			case EventType.NoteOff:
+				_keyboard.set_note (_jack_adapter.inbox[eid].note, false);
+				break;
+			default:
+				// nothing to do
+				break;
+			}
+		}
+		// clear inbox
 		_jack_adapter.inbox_size = 0;
+		// redraw
+		_keyboard.queue_draw ();
 		return GLib.Source.REMOVE;
 	}
 
