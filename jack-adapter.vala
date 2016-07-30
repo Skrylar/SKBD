@@ -51,7 +51,7 @@ class JackAdapter {
 				if (inbox_size < 127) {
 					Event e = {};
 					e.type = EventType.NoteOn;
-					e.note = evt.buffer[2];
+					e.note = evt.buffer[1];
 					inbox[inbox_size++] = e;
 				}
 				break;
@@ -59,7 +59,7 @@ class JackAdapter {
 				if (inbox_size < 127) {
 					Event e = {};
 					e.type = EventType.NoteOff;
-					e.note = evt.buffer[2];
+					e.note = evt.buffer[1];
 					inbox[inbox_size++] = e;
 				}
 				break;
