@@ -95,7 +95,6 @@ public class midithing.Keyboard : Gtk.Widget {
 				cr.fill ();
 			}
 			note += _whole_steps[i % 7];
-			stdout.printf("NOTE: %d\n", note);
 		}
 
 		cr.set_source_rgb (1.0, 1.0, 1.0);
