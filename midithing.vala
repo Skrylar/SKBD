@@ -50,6 +50,19 @@ public class midithing.Midithing : Gtk.Application {
 		return true;
 	}
 
+	protected bool on_key_down (Gdk.EventKey event) {
+		switch (event.keyval) {
+		case (uint16)Gdk.Key.Escape:
+			_infobar_revealer.reveal_child = false;
+			break;
+		}
+		return false;
+	}
+
+	protected bool on_key_up (Gdk.EventKey event) {
+		return false;
+	}
+
 	protected void create_gui () {
 		_appwin = new Gtk.ApplicationWindow (this);
 		Gtk.HeaderBar header = new Gtk.HeaderBar ();
@@ -88,6 +101,10 @@ public class midithing.Midithing : Gtk.Application {
 
 			_appwin.add (box);
 		} /* main content box */
+
+		// connect window keyboard to handlers
+		_appwin.key_press_event.connect (on_key_up);
+		_appwin.key_release_event.connect (on_key_down);
 
 		_appwin.set_default_size (280, 100);
 		_appwin.show_all ();
