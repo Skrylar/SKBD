@@ -51,80 +51,129 @@ public class midithing.Midithing : Gtk.Application {
 	}
 
 	protected bool handle_midi_key (uint16 key, bool down) {
+		int note;
 		switch (key) {
-			// lower octave
+		// lower octave
 		case (uint16)Gdk.Key.z:
-			_keyboard.set_note ((_keyboard.root_octave*12)+0, !down);
+			note = (_keyboard.root_octave*12)+0;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.s:
-			_keyboard.set_note ((_keyboard.root_octave*12)+1, !down);
+			note = (_keyboard.root_octave*12)+1;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.x:
-			_keyboard.set_note ((_keyboard.root_octave*12)+2, !down);
+			note = (_keyboard.root_octave*12)+2;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.d:
-			_keyboard.set_note ((_keyboard.root_octave*12)+3, !down);
+			note = (_keyboard.root_octave*12)+3;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.c:
-			_keyboard.set_note ((_keyboard.root_octave*12)+4, !down);
+			note = (_keyboard.root_octave*12)+4;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.v:
-			_keyboard.set_note ((_keyboard.root_octave*12)+5, !down);
+			note = (_keyboard.root_octave*12)+5;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.g:
-			_keyboard.set_note ((_keyboard.root_octave*12)+6, !down);
+			note = (_keyboard.root_octave*12)+6;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.b:
-			_keyboard.set_note ((_keyboard.root_octave*12)+7, !down);
+			note = (_keyboard.root_octave*12)+7;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.h:
-			_keyboard.set_note ((_keyboard.root_octave*12)+8, !down);
+			note = (_keyboard.root_octave*12)+8;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.n:
-			_keyboard.set_note ((_keyboard.root_octave*12)+9, !down);
+			note = (_keyboard.root_octave*12)+9;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.j:
-			_keyboard.set_note ((_keyboard.root_octave*12)+10, !down);
+			note = (_keyboard.root_octave*12)+10;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.m:
-			_keyboard.set_note ((_keyboard.root_octave*12)+11, !down);
+			note = (_keyboard.root_octave*12)+11;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
-			// higher octave
+		// higher octave
 		case (uint16)Gdk.Key.q:
-			_keyboard.set_note ((_keyboard.root_octave*12)+12, !down);
+			note = (_keyboard.root_octave*12)+12;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.@2:
-			_keyboard.set_note ((_keyboard.root_octave*12)+13, !down);
+			note = (_keyboard.root_octave*12)+13;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.w:
-			_keyboard.set_note ((_keyboard.root_octave*12)+14, !down);
+			note = (_keyboard.root_octave*12)+14;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.@3:
-			_keyboard.set_note ((_keyboard.root_octave*12)+15, !down);
+			note = (_keyboard.root_octave*12)+15;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.e:
-			_keyboard.set_note ((_keyboard.root_octave*12)+16, !down);
+			note = (_keyboard.root_octave*12)+16;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.r:
-			_keyboard.set_note ((_keyboard.root_octave*12)+17, !down);
+			note = (_keyboard.root_octave*12)+17;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.@5:
-			_keyboard.set_note ((_keyboard.root_octave*12)+18, !down);
+			note = (_keyboard.root_octave*12)+18;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.t:
-			_keyboard.set_note ((_keyboard.root_octave*12)+19, !down);
+			note = (_keyboard.root_octave*12)+19;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.@6:
-			_keyboard.set_note ((_keyboard.root_octave*12)+20, !down);
+			note = (_keyboard.root_octave*12)+20;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.y:
-			_keyboard.set_note ((_keyboard.root_octave*12)+21, !down);
+			note = (_keyboard.root_octave*12)+21;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.@7:
-			_keyboard.set_note ((_keyboard.root_octave*12)+22, !down);
+			note = (_keyboard.root_octave*12)+22;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		case (uint16)Gdk.Key.u:
-			_keyboard.set_note ((_keyboard.root_octave*12)+23, !down);
+			note = (_keyboard.root_octave*12)+23;
+			_keyboard.set_note (note, !down);
+			_jack_adapter.post_note_onoff (note, !down);
 			return true;
 		default: return false;
 		}

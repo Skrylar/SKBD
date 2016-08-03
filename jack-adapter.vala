@@ -34,6 +34,22 @@ class JackAdapter {
 	// messages have been dispatched.
 	public int outbox_size = 0;
 
+	public void post_note_onoff (int note, bool on)
+	requires ((note >= 0) && (note <= 127)) {
+		// avoid overflow
+		if (outbox_size >= 127) return;
+		// set note
+		outbox[outbox_size].note = (uint8)note;
+		// what is the note doing?
+		if (on) {
+			outbox[outbox_size].type = EventType.NoteOn;
+		} else {
+			outbox[outbox_size].type = EventType.NoteOff;
+		}
+		// carry on
+		outbox_size++;
+	}
+
 	private int jack_process (Jack.NFrames samples) {
 		// XXX taboo in a real_time thread
 		void* buffer = _port_in.get_buffer (samples);
