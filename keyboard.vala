@@ -21,7 +21,7 @@
    SOFTWARE.
 */
 
-public class midithing.Keyboard : Gtk.Widget {
+public class skbd.Keyboard : Gtk.Widget {
 	private bool _note_state[12*12];
 
 	private const int[] _wholes = {0, 2, 4, 5, 7, 9, 11};

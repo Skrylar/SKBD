@@ -15,8 +15,8 @@
    <http://www.gnu.org/licenses/>.
 */
 
-public class midithing.Midithing : Gtk.Application {
-	const string _jack_name = "Midithing";
+public class skbd.SKBD : Gtk.Application {
+	const string _jack_name = "SKBD";
 	const string _port_in_name = "midi-in";
 	const string _port_out_name = "midi-out";
 
@@ -33,8 +33,8 @@ public class midithing.Midithing : Gtk.Application {
 
 	private weak Keyboard _keyboard;
 
-	public Midithing () {
-		Object(application_id: "skrylar.Midithing",
+	public SKBD () {
+		Object(application_id: "skrylar.SKBD",
 			   flags: ApplicationFlags.FLAGS_NONE);
 		_jack_adapter = new JackAdapter ();
 		_jack_adapter.collect = on_idle;
@@ -220,7 +220,7 @@ public class midithing.Midithing : Gtk.Application {
 	protected void create_gui () {
 		_appwin = new Gtk.ApplicationWindow (this);
 		Gtk.HeaderBar header = new Gtk.HeaderBar ();
-		header.title = "Midithing";
+		header.title = "SKBD";
 		header.show_close_button = true;
 		_appwin.set_titlebar (header);
 
@@ -292,7 +292,7 @@ public class midithing.Midithing : Gtk.Application {
 	}
 
 	public static int main (string[] args) {
-		Midithing app = new Midithing ();
+		SKBD app = new SKBD ();
 		return app.run (args);
 	}
 }
