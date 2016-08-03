@@ -27,6 +27,13 @@ class JackAdapter {
 	// read them.
 	public int inbox_size = 0;
 
+	// Stores events to send outward.
+	public Event outbox[127];
+
+	// Number of events in the inbox. Will be reset to zero once
+	// messages have been dispatched.
+	public int outbox_size = 0;
+
 	private int jack_process (Jack.NFrames samples) {
 		// XXX taboo in a real_time thread
 		void* buffer = _port_in.get_buffer (samples);
@@ -39,8 +46,28 @@ class JackAdapter {
 		var events = Jack.Midi.get_event_count (buffer);
 		Jack.Midi.Event evt = {};
 
-		int ibox = inbox_size;
+		// transmit outbox messages
+		for (int i = 0; i < outbox_size; i++) {
+			Jack.Midi.Data* datum;
+			switch (outbox[i].type) {
+			case EventType.NoteOn:
+				datum = Jack.Midi.event_reserve (out_buffer, 0, 3);
+				datum[0] = MidiMessageType.NoteOn;
+				datum[1] = outbox[i].note;
+				datum[2] = 127;
+				break;
+			case EventType.NoteOff:
+				datum = Jack.Midi.event_reserve (out_buffer, 0, 3);
+				datum[0] = MidiMessageType.NoteOff;
+				datum[1] = outbox[i].note;
+				datum[2] = 0;
+				break;
+			}
+		}
+		outbox_size = 0;
 
+		// deal with inbox stuff
+		int ibox = inbox_size;
 		for (int i = 0; i < events; i++) {
 			// grab event
 			Jack.Midi.event_get (&evt, buffer, i);
@@ -77,6 +104,7 @@ class JackAdapter {
 			Posix.memmove (datum, evt.buffer, evt.size);
 		}
 
+		// dispatch inbox messages if there are any
 		if (collect != null && ibox == 0 && inbox_size > 0) {
 			Idle.add (() => {
 					return collect ();
