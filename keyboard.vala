@@ -10,21 +10,17 @@ public class midithing.Keyboard : Gtk.Widget {
 	// this is mathy midi; 0 is the lowest, not -1
 	private int _root_octave = 4;
 
-	// NB this is "common user" midi. -1 is the lowest octave, and we
-	// automatically correct this to "mathy" midi on assignment. For
-	// some reason so many people expect this, and compliance is more
-	// reasonable than instructing musicians how to do math properly.
+	// NB this is one higher than you would expect; C3 is actually the
+	// fourth octave, because there is a -1 octave in most midi apps.
 	public int root_octave {
 		get {
 			return _root_octave;
 		}
 
 		set {
-			// contract enforcement
-			return_if_fail (value < -1);
-			return_if_fail (value > 9);
-			// adjustment for stupidity
-			_root_octave = value + 1;
+			return_if_fail (value >= 0);
+			return_if_fail (value <= 10);
+			_root_octave = value;
 		}
 	}
 
@@ -32,7 +28,8 @@ public class midithing.Keyboard : Gtk.Widget {
 		return _note_state[note];
 	}
 
-	public void set_note(int note, bool state) {
+	public void set_note(int note, bool state)
+	requires ((note >= 0) && (note <= 127)) {
 		_note_state[note] = state;
 		// XXX this doesn't queue the widget to re-draw, by the way
 	}
