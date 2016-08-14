@@ -15,7 +15,7 @@
   <http://www.gnu.org/licenses/>.
 */
 
-class JackAdapter {
+class skbd.JackAdapter {
 	private static Jack.Port? _port_in;
 	private static Jack.Port? _port_out;
 	private static Jack.Client? _client;
