@@ -224,9 +224,12 @@ public class skbd.SKBD : Gtk.Application {
 		header.show_close_button = true;
 		_appwin.set_titlebar (header);
 
+		var settings_menu_button = new Gtk.MenuButton ();
+		header.pack_end (settings_menu_button);
+
 		_jack_switch = new Gtk.Switch ();
 		_jack_switch.state_set.connect (on_toggle_jack);
-		header.pack_end (_jack_switch);
+		header.pack_start (_jack_switch);
 
 		/* main content box */ {
 			var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
