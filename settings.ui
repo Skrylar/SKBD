@@ -7,7 +7,7 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <template class="MidithingAppMenu" parent="GtkPopover">
+  <template class="skbdSettingsPopover" parent="GtkPopover">
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">
@@ -672,10 +672,6 @@
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="submenu">main</property>
-        <property name="position">1</property>
-      </packing>
     </child>
   </template>
 </interface>

@@ -227,6 +227,9 @@ public class skbd.SKBD : Gtk.Application {
 		var settings_menu_button = new Gtk.MenuButton ();
 		header.pack_end (settings_menu_button);
 
+		var settings_popover = new SettingsPopover ();
+		settings_menu_button.set_popover (settings_popover);
+
 		_jack_switch = new Gtk.Switch ();
 		_jack_switch.state_set.connect (on_toggle_jack);
 		header.pack_start (_jack_switch);

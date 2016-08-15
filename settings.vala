@@ -1,5 +1,5 @@
 namespace skbd {
 	[GtkTemplate (ui = "/skbd/settings.ui")]
-	public class MidithingAppMenu : Gtk.Popover {
+	public class SettingsPopover : Gtk.Popover {
 	}
 } /* skbd */
