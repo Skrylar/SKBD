@@ -224,11 +224,20 @@ public class skbd.SKBD : Gtk.Application {
 		header.show_close_button = true;
 		_appwin.set_titlebar (header);
 
-		var settings_menu_button = new Gtk.MenuButton ();
-		header.pack_end (settings_menu_button);
+		Gtk.Image* settings_image = new Gtk.Image.from_stock (
+			"gtk-properties",
+			Gtk.IconSize.LARGE_TOOLBAR);
 
-		var settings_popover = new SettingsPopover ();
-		settings_menu_button.set_popover (settings_popover);
+		var settings_menu_button = new Gtk.Button ();
+		header.pack_end (settings_menu_button);
+		settings_menu_button.set_image (settings_image);
+
+		settings_menu_button.clicked.connect (() => {
+				var window = new SettingsWindow ();
+				// TODO connect signals for issuing config changes
+				window.show_all ();
+				window.set_modal (true);
+			});
 
 		_jack_switch = new Gtk.Switch ();
 		_jack_switch.state_set.connect (on_toggle_jack);

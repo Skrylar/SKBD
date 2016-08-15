@@ -7,7 +7,7 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <template class="skbdSettingsPopover" parent="GtkPopover">
+  <template class="skbdSettingsWindow" parent="GtkWindow">
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">
@@ -27,11 +27,12 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton">
-                <property name="label">gtk-open</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_cancel_changes" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -41,11 +42,13 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label">gtk-save</property>
+                <property name="label">gtk-apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <property name="always_show_image">True</property>
+                <signal name="clicked" handler="on_apply_changes" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -94,7 +97,6 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment1</property>
-                    <property name="fill_level">10</property>
                     <property name="draw_value">False</property>
                   </object>
                   <packing>
@@ -672,6 +674,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child>
+      <placeholder/>
     </child>
   </template>
 </interface>
