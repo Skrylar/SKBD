@@ -4,9 +4,6 @@ A small virtual piano keyboard for [JACK](http://www.jackaudio.org/),
 that fits nicely on your [elementary](https://elementary.io/)
 desktop. By Skrylar.
 
-Bitcoins accepted for this project at:
-1QBvAuynS3bxr9HYLCt3PUuztEUfhcEiyh
-
 Main program under the GPL2. Keyboard widget is itself available under
 MIT.
 
